@@ -12,7 +12,8 @@ dependencies:
   flutter:
     sdk: flutter
   app_theme:
-    path: ../app_theme
+    git:
+      url: https://github.com/vishalsharma-hovr/app_theme.git
 
 dev_dependencies:
   flutter_test:
