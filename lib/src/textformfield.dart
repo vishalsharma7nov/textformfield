@@ -53,7 +53,7 @@ class CustomTextFormField extends StatefulWidget {
     this.containerBorderRadius = 0,
     this.suffixIcon,
     this.prefixIcon,
-    this.hintTextColor = AppColor.blackColor,
+    this.hintTextColor = AppColors.blackColor,
     this.prefixStyle,
     this.contentPadding = EdgeInsets.zero,
     this.autoFocus = false,
@@ -83,12 +83,12 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       builder: (context, isFilled, _) {
         return Container(
           decoration: BoxDecoration(
-            color: isFilled ? AppColor.greyColor : AppColor.greyColor,
+            color: isFilled ? AppColors.greyColor : AppColors.greyColor,
             borderRadius: BorderRadius.all(
               Radius.circular(widget.containerBorderRadius),
             ),
             border: Border.all(
-              color: AppColor.grey100,
+              color: AppColors.grey100,
             ),
           ),
           height: widget.height,
@@ -108,7 +108,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
               textAlignVertical: widget.textAlignVertical,
               textCapitalization: widget.textCapitalization,
               style: const TextStyle(
-                color: AppColor.black900,
+                color: AppColors.black900,
               ),
               decoration: widget.maxLines != 1
                   ? InputDecoration.collapsed(
@@ -119,7 +119,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                     )
                   : InputDecoration(
                       filled: isFilled,
-                      fillColor: isFilled ? AppColor.white000 : AppColor.greyColor,
+                      fillColor: isFilled ? AppColors.white000 : AppColors.greyColor,
                       hintText: widget.hintText,
                       contentPadding: widget.contentPadding,
                       hintStyle: TextStyle(
@@ -127,7 +127,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                         color: widget.hintTextColor,
                       ),
                       errorStyle: const TextStyle(
-                        color: AppColor.errorColor,
+                        color: AppColors.errorColor,
                         fontSize: 14,
                         height: .1,
                       ),
@@ -142,7 +142,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                         ),
                         borderSide: BorderSide(
                           width: 2,
-                          color: AppColor.brandPrimary,
+                          color: AppColors.brandPrimary,
                         ),
                       ),
                       focusedErrorBorder: const OutlineInputBorder(
@@ -151,7 +151,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                         ),
                         borderSide: BorderSide(
                           width: 1.5,
-                          color: AppColor.errorColor,
+                          color: AppColors.errorColor,
                         ),
                       ),
                       errorBorder: const OutlineInputBorder(
@@ -160,7 +160,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                         ),
                         borderSide: BorderSide(
                           width: 1.5,
-                          color: AppColor.errorColor,
+                          color: AppColors.errorColor,
                         ),
                       ),
                     ),
