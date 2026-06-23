@@ -2,6 +2,12 @@
   "configVersion": 2,
   "packages": [
     {
+      "name": "app_theme",
+      "rootUri": "file:///home/codespace/.pub-cache/git/app_theme-2ba0e8220edacf4e7ea442be40bd1e8096cdb30c/",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
       "name": "async",
       "rootUri": "file:///home/codespace/.pub-cache/hosted/pub.dev/async-2.13.0",
       "packageUri": "lib/",
@@ -30,6 +36,12 @@
       "rootUri": "file:///home/codespace/.pub-cache/hosted/pub.dev/collection-1.19.1",
       "packageUri": "lib/",
       "languageVersion": "3.4"
+    },
+    {
+      "name": "custom_text_view",
+      "rootUri": "file:///home/codespace/.pub-cache/git/custom_text_view-1fb012e26a0279e0a530ee1cc422c83fed03a52a/",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
     },
     {
       "name": "fake_async",

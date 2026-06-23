@@ -11,9 +11,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  # app_theme:
-  #   git:
-  #     url: https://github.com/vishalsharma-hovr/app_theme.git
+  app_theme:
+    git:
+      url: https://github.com/vishalsharma-hovr/app_theme.git
 
 dev_dependencies:
   flutter_test:
