@@ -30,6 +30,16 @@ class CustomTextFormField extends StatefulWidget {
   final FocusNode? focusNode;
   final TextAlignVertical? textAlignVertical;
 
+  /// Lets the OS fill the field, e.g. [AutofillHints.email] or
+  /// [AutofillHints.oneTimeCode].
+  final Iterable<String>? autofillHints;
+
+  /// Shown under the field while non-null. The fixed [height] leaves no room
+  /// for [validator] messages inside the box, so screens pass errors here.
+  final String? errorText;
+
+  static const Key errorKey = ValueKey('custom-text-form-field-error');
+
   const CustomTextFormField({
     super.key,
     this.width,
@@ -53,13 +63,15 @@ class CustomTextFormField extends StatefulWidget {
     this.containerBorderRadius = 0,
     this.suffixIcon,
     this.prefixIcon,
-    this.hintTextColor = AppColors.blackColor,
+    this.hintTextColor,
     this.prefixStyle,
     this.contentPadding = EdgeInsets.zero,
     this.autoFocus = false,
     this.textCapitalization = TextCapitalization.none,
     this.focusNode,
     this.textAlignVertical,
+    this.autofillHints,
+    this.errorText,
   });
 
   @override
@@ -81,19 +93,23 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
     return ValueListenableBuilder<bool>(
       valueListenable: _isFilled,
       builder: (context, isFilled, _) {
-        return Container(
+        final errorText = widget.errorText;
+        final colors = context.colors;
+        final field = Container(
           decoration: BoxDecoration(
-            color: isFilled ? AppColors.greyColor : AppColors.greyColor,
+            color: colors.greyColor,
             borderRadius: BorderRadius.all(
               Radius.circular(widget.containerBorderRadius),
             ),
             border: Border.all(
-              color: AppColors.grey100,
+              color: colors.grey100,
             ),
           ),
           height: widget.height,
           width: widget.width,
           child: Focus(
+            // Only reports focus; Next must land on the text field inside.
+            skipTraversal: true,
             onFocusChange: (hasFocus) {
               _isFilled.value = hasFocus;
               widget.hasFocus(hasFocus);
@@ -107,8 +123,8 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
               enabled: widget.enabled,
               textAlignVertical: widget.textAlignVertical,
               textCapitalization: widget.textCapitalization,
-              style: const TextStyle(
-                color: AppColors.black900,
+              style: TextStyle(
+                color: colors.black900,
               ),
               decoration: widget.maxLines != 1
                   ? InputDecoration.collapsed(
@@ -119,15 +135,15 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                     )
                   : InputDecoration(
                       filled: isFilled,
-                      fillColor: isFilled ? AppColors.white000 : AppColors.greyColor,
+                      fillColor: isFilled ? colors.white000 : colors.greyColor,
                       hintText: widget.hintText,
                       contentPadding: widget.contentPadding,
                       hintStyle: TextStyle(
                         fontSize: widget.hintFontSize,
-                        color: widget.hintTextColor,
+                        color: widget.hintTextColor ?? colors.black,
                       ),
-                      errorStyle: const TextStyle(
-                        color: AppColors.errorColor,
+                      errorStyle: TextStyle(
+                        color: colors.errorColor,
                         fontSize: 14,
                         height: .1,
                       ),
@@ -136,31 +152,31 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                       prefixStyle: widget.prefixStyle,
                       suffixIcon: widget.suffixIcon,
                       border: InputBorder.none,
-                      focusedBorder: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: const BorderRadius.all(
                           Radius.circular(10),
                         ),
                         borderSide: BorderSide(
                           width: 2,
-                          color: AppColors.brandPrimary,
+                          color: context.brand.brandPrimary,
                         ),
                       ),
-                      focusedErrorBorder: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderRadius: const BorderRadius.all(
                           Radius.circular(10),
                         ),
                         borderSide: BorderSide(
                           width: 1.5,
-                          color: AppColors.errorColor,
+                          color: colors.errorColor,
                         ),
                       ),
-                      errorBorder: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: const BorderRadius.all(
                           Radius.circular(10),
                         ),
                         borderSide: BorderSide(
                           width: 1.5,
-                          color: AppColors.errorColor,
+                          color: colors.errorColor,
                         ),
                       ),
                     ),
@@ -175,13 +191,37 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                 FocusScope.of(context).unfocus();
               },
               onEditingComplete: () {
-                FocusScope.of(context).unfocus();
+                if (widget.textInputAction == TextInputAction.next) {
+                  FocusScope.of(context).nextFocus();
+                } else {
+                  FocusScope.of(context).unfocus();
+                }
                 _isFilled.value = false;
                 widget.onEditingComplete();
               },
               validator: widget.validator,
+              autofillHints: widget.autofillHints,
             ),
           ),
+        );
+        if (errorText == null) return field;
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            field,
+            Padding(
+              padding: const EdgeInsetsDirectional.only(top: 6, start: 4),
+              child: Semantics(
+                liveRegion: true,
+                child: Text(
+                  errorText,
+                  key: CustomTextFormField.errorKey,
+                  style: TextStyle(color: colors.errorColor, fontSize: 13),
+                ),
+              ),
+            ),
+          ],
         );
       },
     );
